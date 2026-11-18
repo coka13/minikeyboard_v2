@@ -1,3 +1,62 @@
+## Mini Keyboard Studio
+
+Open **Mini Keyboard Studio.exe** for the refreshed Windows interface:
+
+- Dark theme with clear selection states and a live USB connection badge.
+- A keypad and dial layout beside a dedicated assignment preview.
+- Keyboard, modifier, media, lighting, and mouse action categories.
+- A separate **Send to keyboard** action to write your configuration.
+- Scrollable content when the window is smaller than the configuration surface.
+- DPI-aware rendering and a centered logo that stays inside its bounds.
+- Live output inspection from the physical macropad, with no saved history.
+
+Select a key or dial action, build its assignment using the action library, then
+send the configuration to your keyboard. The assignment fields are previews;
+use the library to edit them. **Clear assignment** clears the selected assignment.
+
+### Inspect the real output
+
+Select a control and click **Inspect this control's live output**, then press that
+key or turn/press that dial on the physical macropad. The live inspector displays
+the keyboard, media, or mouse events actually emitted by USB device `1189:8890`.
+Other keyboards and mice are excluded. Inspection stops after ten seconds, when
+you click Stop, or when Studio loses focus. It never writes the device or saves
+input history. Shortcuts emitted by the macropad still run in Windows.
+
+This is live output inspection, not a flash configuration dump: the known protocol
+for this model has no assignment-read command. Studio therefore cannot populate
+all existing assignments automatically. See the [protocol compatibility notes](https://github.com/hobbyworker/MINIKeyboardLinux#readme).
+
+Keep the launcher beside `MINI KeyBoard.exe`, its configuration, resource folders,
+and DLLs. The Studio reuses the original Windows Forms controls and their HID
+handlers. The original executable and device protocol are unchanged.
+
+The bundled executable wires up 12 keys and two dials. Its extra key and third-dial
+controls have no click handlers, so Studio hides those inactive controls. Layer
+and lighting support still depend on the connected hardware and vendor controller.
+
+### Building the UI
+
+The launcher source is in `src/Studio.cs`. Run this from PowerShell:
+
+```powershell
+.\build.ps1
+```
+
+The script uses the .NET Framework 4 C# compiler included with Windows; no .NET SDK
+or package restore is needed. Close Studio before rebuilding. The launcher is
+compiled for x86 to match the vendor executable.
+
+Run `.\test.ps1` to verify device filtering, modifiers, and emitted key decoding.
+
+Validation: the launcher was compiled and visually checked on Windows, including
+key selection, category navigation, live connection status, native DPI rendering,
+and the full action library. The live inspector received `End → Insert` from the
+physical macropad. Its device filtering and keyboard decoding also pass 13 test
+assertions. Writing a configuration to hardware was not part of UI verification.
+
+## Original software notes
+
 software for https://www.amazon.de/gp/product/B0B1QTDY66/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1
 12 key + 2 knobs macro keyboard
 
